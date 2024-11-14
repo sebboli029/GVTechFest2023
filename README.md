@@ -1,4 +1,4 @@
-Reultado del codigo
+Resultado del codigo
 ```
 En la fecha 2024-11-13 20:40:49.548785 se generó una Alerta roja porque la temperatura es 36.63°C
 En la fecha 2024-11-13 20:40:49.548785 la humedad ambiental es 65.81%
