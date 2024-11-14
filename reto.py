@@ -43,13 +43,11 @@ hambiental = []
 luz = []
 
 # Añadiendo los valores a la lectura
-i = 0
-while (i<10):
+for _ in range(10):
     valorLM35 = (LM35.medir()*4.88)/10
     valorFC28 = 100-((FC28.medir()/1023)*100)
     valorDHT22 = DHT22.medir()
     valorBH1750 = BH1750.medir()*0.093
-    i = i+1
     timestamp = datetime.now()
     lecturas.append(
         {
@@ -64,7 +62,7 @@ while (i<10):
 
 # Imprimiendo los valores de los sensores
 for dato in lecturas:
-    #
+    # Imprimiendo los valores de los sensores de tempertaura
     if dato["temperatura"] < TEMP_BAJA_LM35 or dato["temperatura"] > TEMP_ALTA_LM35 : 
         print(f"En la fecha {dato["timestamp"]} se generó una Alerta roja porque la temperatura es {dato["temperatura"]:.2f}°C")
     elif dato["temperatura"] > TEMP_BAJA_LM35 and dato["temperatura"] < TEMP_YELLOW_LM35:
@@ -73,18 +71,19 @@ for dato in lecturas:
         print(f"En la fecha {dato["timestamp"]} la temperatura es {dato["temperatura"]:.2f}°C")
         
 
-    #
+    # Imprimiendo los valores de los sensores de humedad ambiental
     if dato["humedadambiental"] < HUM_BAJA_DHT22 or dato["humedadambiental"] > HUM_ALTA_DHT22:
         print(f"En la fecha {dato["timestamp"]} se genero una alerta roja porque la humedad ambiental es {dato["humedadambiental"]:.2f}%")
     else:
          print(f"En la fecha {dato["timestamp"]} la humedad ambiental es {dato["humedadambiental"]:.2f}%")
 
+    # Imprimiendo los valores de los sensores de la humedad en el suelo
     if dato["humedadsuelo"] < HUM_BAJA_FC28 or dato["humedadsuelo"] > HUM_ALTA_FC28:
         print(f"En la fecha {dato["timestamp"]} se genero una alerta roja porque la humedad en el suelo es {dato["humedadsuelo"]:.2f}%")
     else:
          print(f"En la fecha {dato["timestamp"]} la humedad en el suelo es {dato["humedadsuelo"]:.2f}%")
 
-
+    # Imprimiendo los valores de los sensores de intensiadad luminica
     if dato["intensidadluminica"] < LUZ_BAJA_BH1750 or dato["intensidadluminica"] > LUZ_ALTA_BH1750 : 
         print(f"En la fecha {dato["timestamp"]} se generó una Alerta roja porque la temperatura es {dato["intensidadluminica"]:.2f}°C")
     elif dato["intensidadluminica"] > LUZ_BAJA_BH1750 and dato["intensidadluminica"] < LUZ_YELLOW_BH1750:
@@ -92,14 +91,14 @@ for dato in lecturas:
     else:
         print(f"En la fecha {dato["timestamp"]} la temperatura es {dato["temperatura"]:.2f}°C")
 
-    #
+    # Añadiendo los datos a la lista
     timeX.append(dato["timestamp"])
     temp.append([dato["temperatura"]])
     hambiental.append(dato["humedadambiental"])
     hsuelo.append(dato["humedadsuelo"])
     luz.append(dato["intensidadluminica"])
 
-# 
+# Greando la gráfica de temperatura
 plt.subplot(4,1,1)
 plt.plot(timeX,temp, color='red', linestyle='--', label='LM35', marker='.', markersize=10, linewidth=2)
 plt.title('Temperatura', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
@@ -107,6 +106,7 @@ plt.xlabel('time (seg)')
 plt.ylabel('Temperarura en °C')
 plt.legend()
 
+# Greando la gráfica de humedad ambiental
 plt.subplot(4,1,2)
 plt.plot(timeX,hambiental, color='blue', linestyle='--', label='DHT22', marker='.', markersize=10, linewidth=2)
 plt.title('Humedad ambiental', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
@@ -114,16 +114,18 @@ plt.xlabel('time (seg)')
 plt.ylabel('Humedad ambiental(%)')
 plt.legend()
 
+# Greando la gráfica de la humedad en el suelo 
 plt.subplot(4,1,3)
 plt.plot(timeX,hsuelo, color='Green', linestyle='--', label='FC28', markersize=10, linewidth=2)
-plt.title('Humedad en el suelo suelo', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
+plt.title('Humedad en el suelo', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
 plt.xlabel('time (seg)')
 plt.ylabel('Huemdad en el suelo(%)')
 plt.legend()
 
+# Greando la gráfica de la intensidad luminica
 plt.subplot(4,1,4)
 plt.plot(timeX,luz, color='Grey', linestyle='--', label='BH1750', marker='.', markersize=10, linewidth=2)
-plt.title('IntensidadSA', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
+plt.title('Intensidad Luminica', fontdict={'fontname':'Comic Sans MS', 'fontsize':20})
 plt.xlabel('time (seg)')
 plt.ylabel('Intensidad de luz en FC')
 plt.legend()
